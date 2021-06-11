@@ -55,18 +55,17 @@ function mouseReleased() {
   }
 
   // it could be itself
-  if (pieceHeld === p) {
+  // is not itself
+  if (pieceHeld === p || p.white == pieceHeld.white) {
     pieceHeld.holding = false;
     pieceHeld = null;
     return;
   }
 
-  // is not itself
-  if (p.white == pieceHeld.white) {
-    pieceHeld.holding = false;
-    pieceHeld = null;
-    return;
-  }
+  if (pieceHeld.type == "pawn" && pieceHeld.white && coords.by == 0)
+    pieceHeld.type = "queen";
+  if (pieceHeld.type == "pawn" && !pieceHeld.white && coords.by == 7)
+    pieceHeld.type = "queen";
 
   removePiece(p);
   pieceHeld.bx = coords.bx;

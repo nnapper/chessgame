@@ -21,16 +21,6 @@ function mousePressed() {
     pieceHeld = piece;
     piece.holding = true;
   }
-  // if (isValidPawnMove(pawn.bx, pawn.by, bx1, by1, true)) {
-  //   pawn.bx = bx1;
-  //   pawn.by = by1;
-  // }
-  // var validMove = isValidRookMove(rook.bx, rook.by, bx1, by1, true);
-  // console.log("valid move", validMove);
-  // if (validMove) {
-  //   rook.bx = bx1;
-  //   rook.by = by1;
-  // }
 }
 
 function mouseReleased() {
@@ -38,6 +28,22 @@ function mouseReleased() {
 
   var coords = getMouseBoardCoords();
   if (coords == null) return;
+  var checkValidMoveFunction = funcForValidMove(pieceHeld.type);
+  var validMove = checkValidMoveFunction(
+    pieceHeld.bx,
+    pieceHeld.by,
+    coords.bx,
+    coords.by,
+    pieceHeld.white
+  );
+
+  console.log("validm moved", validMove);
+  if (!validMove) {
+    pieceHeld.holding = false;
+    pieceHeld = null;
+    return;
+  }
+
   var p = findPiece(coords);
 
   // empty box
@@ -75,6 +81,6 @@ function mouseReleased() {
 }
 
 function removePiece(piece) {
-  var i = findIndex(piece);
+  var i = findPieceIndex(piece);
   chessPieces.splice(i, 1);
 }

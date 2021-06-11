@@ -15,34 +15,6 @@ function getMouseBoardCoords() {
   return null;
 }
 
-function isValidPawnMove(bx, by, bx1, by1, isWhite) {
-  if (bx1 != bx) return false;
-
-  if (isWhite && by1 >= by) return false;
-  if (!isWhite && by1 <= by) return false;
-
-  var steps = Math.abs(by - by1);
-  if (steps > 2) return false;
-
-  var startingOff = false;
-  if (isWhite && by == 6) startingOff = true;
-  if (!isWhite && by == 1) startingOff = true;
-
-  if (!startingOff && steps > 1) return false;
-  return true;
-}
-
-function isValidRookMove(bx, by, bx1, by1, isWhite) {
-  if (bx1 != bx) return false;
-
-  if (isWhite && by1 >= by) return false;
-  if (!isWhite && by1 <= by) return false;
-
-  var steps = Math.abs(by - by1);
-
-  return true;
-}
-
 function createPiece(type, bx, by, isWhite) {
   var color = isWhite ? "rgba(255, 255, 255, 1)" : "rgba(0, 0, 0, 1)";
 
@@ -109,22 +81,16 @@ function createAllPieces() {
 }
 
 function findPiece(coord) {
-  var i = findIndex(coord);
+  var i = findPieceIndex(coord);
   if (i < 0) return null;
   return chessPieces[i];
-  // for (var i = 0; i < chessPieces.length; i++) {
-  //   if (chessPieces[i].bx == bx && chessPieces[i].by == by)
-  //     return chessPieces[i];
-  // }
-  // return null;
 }
 
-function findIndex({ bx, by }) {
-  var index = -1;
+function findPieceIndex({ bx, by }) {
   for (var i = 0; i < chessPieces.length; i++) {
     if (chessPieces[i].bx == bx && chessPieces[i].by == by) {
-      index = i;
+      return i;
     }
   }
-  return index;
+  return -1;
 }

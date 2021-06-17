@@ -7,7 +7,7 @@ function drawCharacter(object) {
   var movedPoints = movePoints(points, object);
   push();
   stroke(color(object.color));
-  strokeWeight(3);
+  strokeWeight(global.boxSize / 2);
   drawShape(movedPoints);
   pop();
 }

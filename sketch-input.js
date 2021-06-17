@@ -27,7 +27,9 @@ function mouseReleased() {
   if (pieceHeld == null) return;
 
   var coords = getMouseBoardCoords();
+
   if (coords == null) return;
+
   var checkValidMoveFunction = funcForValidMove(pieceHeld.type);
   var validMove = checkValidMoveFunction(
     pieceHeld.bx,
@@ -37,7 +39,16 @@ function mouseReleased() {
     pieceHeld.white
   );
 
-  console.log("validm moved", validMove);
+  var checkNonBlockingFunction = funcForBlockedMove(pieceHeld.type);
+  var validMove = checkNonBlockingFunction(
+    pieceHeld.bx,
+    pieceHeld.by,
+    coords.bx,
+    coords.by,
+    pieceHeld.white
+  );
+
+  console.log("valid move", validMove);
   if (!validMove) {
     pieceHeld.holding = false;
     pieceHeld = null;

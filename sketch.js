@@ -1,5 +1,5 @@
 function setup() {
-  createCanvas(BOARD_SIZE, BOARD_SIZE);
+  createCanvas(global.BOARD_SIZE, global.BOARD_SIZE);
 }
 
 function draw() {

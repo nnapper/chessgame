@@ -61,9 +61,11 @@ function funcForValidMove(type) {
 
 function funcForBlockedMove(type) {
   if (type == "pawn") {
-    return true;
+    return isPawnBlocked;
   } else if (type == "knight") {
-    return false;
+    return function () {
+      return false;
+    };
   } else if (type == "bishop") {
     return true;
   } else if (type == "rook") {
@@ -75,8 +77,21 @@ function funcForBlockedMove(type) {
   }
 }
 
-function isPawnBlocked(newCoords) {
-  return findPieceIndex(newCoords) > -1;
+function isPawnBlocked(bx, by, bx1, by1) {
+  var validMove = true;
+  var coords = {
+    bx: 1,
+    by: 1,
+  };
+  var p = findPiece(coords);
+
+  if (pieceHeld.by === 2) {
+    pieceHeld.holding = false;
+    pieceHeld = null;
+    validMove = false;
+  }
+
+  return validMove;
 }
 
 function isBishopBlocked(newCoords, piece) {

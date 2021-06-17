@@ -14,5 +14,83 @@
   </head>
   <body>
     <main></main>
+    <div>
+      <button onclick="newGame()">New Game</button>
+      <button onclick="saveGame()">Save Game</button>
+      <button onclick="resumeGame()">Resume Game</button>
+    </div>
   </body>
+  <script>
+    function newGame() {
+      console.log("you just clicked the new game button");
+      global.chessPieces = createModelForChessPieces(DEFAULT_POSITIONS);
+    }
+
+    function saveGame() {
+      console.log("you just clicked the save game button");
+      localStorage.setItem(
+        "save",
+        createBoardRepresentation(global.chessPieces)
+      );
+    }
+
+    function resumeGame() {
+      console.log("you just clicked the resume game button");
+      if (localStorage.getItem("save") !== null) {
+        var myGameToday = localStorage.getItem("save").split(",");
+        global.chessPieces = createModelForChessPieces(myGameToday);
+      }
+    }
+
+    newGame();
+    /**
+     * return an array strings, which element of the array
+     * represent a line on the board
+     *
+     * @pieces an Array of chess piece model
+     */
+
+    function createBoardRepresentation(pieces) {
+      var board = [];
+      for (var by = 0; by < 8; by++) {
+        var row = [];
+        for (var bx = 0; bx < 8; bx++) {
+          row.push("_");
+        }
+        board.push(row);
+      }
+
+      for (var i = 0; i < pieces.length; i++) {
+        var abbr = getPieceAbbrev(pieces[i]);
+        var bx = pieces[i].bx;
+        var by = pieces[i].by;
+        board[by][bx] = abbr;
+      }
+
+      var newArray = [];
+      for (var i = 0; i < board.length; i++) {
+        var line = board[i];
+        newArray[i] = line.join("");
+      }
+
+      return newArray;
+    }
+
+    /**
+     * parameter: object
+     * that object has properties, type and white
+     */
+    function getPieceAbbrev({ type, white }) {
+      var t = null;
+      if (type === "knight") {
+        t = "n";
+      } else {
+        t = type.charAt(0);
+      }
+      if (white) {
+        t = t.toUpperCase();
+      }
+      return t;
+    }
+  </script>
 </html>

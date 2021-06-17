@@ -1,9 +1,9 @@
 function convertBoard2Xy(p) {
-  return (p + 0.5) * BOX_SIZE;
+  return (p + 0.5) * global.BOX_SIZE;
 }
 
 function convertXy2Board(xy) {
-  return Math.floor(xy / BOX_SIZE);
+  return Math.floor(xy / global.BOX_SIZE);
 }
 
 function getMouseBoardCoords() {
@@ -22,7 +22,7 @@ function createPiece(type, bx, by, isWhite) {
     bx,
     by,
     white: isWhite,
-    s: PIECE_SIZE,
+    s: global.PIECE_SIZE,
     type,
     holding: false,
     xfn: function () {
@@ -83,14 +83,93 @@ function createAllPieces() {
 function findPiece(coord) {
   var i = findPieceIndex(coord);
   if (i < 0) return null;
-  return chessPieces[i];
+  return global.chessPieces[i];
 }
 
 function findPieceIndex({ bx, by }) {
-  for (var i = 0; i < chessPieces.length; i++) {
-    if (chessPieces[i].bx == bx && chessPieces[i].by == by) {
+  for (var i = 0; i < global.chessPieces.length; i++) {
+    if (global.chessPieces[i].bx == bx && global.chessPieces[i].by == by) {
       return i;
     }
   }
   return -1;
+}
+
+function stringToBoardNotation(positions) {
+  var array = [];
+  for (var i = 0; i < positions.length; i++) {
+    var row = positions[i];
+    var smallArray = [];
+    array[i] = smallArray;
+    for (var j = 0; j < row.length; j++) {
+      smallArray[j] = row.substr(j, 1);
+    }
+  }
+  return array;
+}
+
+function giveMeAPieceAt(board, bx, by) {
+  var piece = board[by][bx];
+  var type = null;
+  var isWhite = true;
+  switch (piece) {
+    case "p":
+      type = "pawn";
+      isWhite = false;
+      break;
+    case "n":
+      type = "knight";
+      isWhite = false;
+      break;
+    case "b":
+      type = "bishop";
+      isWhite = false;
+      break;
+    case "r":
+      type = "rook";
+      isWhite = false;
+      break;
+    case "q":
+      type = "queen";
+      isWhite = false;
+      break;
+    case "k":
+      type = "king";
+      isWhite = false;
+      break;
+    case "P":
+      type = "pawn";
+      break;
+    case "N":
+      type = "knight";
+      break;
+    case "B":
+      type = "bishop";
+      break;
+    case "R":
+      type = "rook";
+      break;
+    case "Q":
+      type = "queen";
+      break;
+    case "K":
+      type = "king";
+      break;
+    default:
+      return null;
+  }
+  return createPiece(type, bx, by, isWhite);
+}
+
+function createModelForChessPieces(board) {
+  var allPieces = [];
+  for (var by = 0; by < 8; by++) {
+    for (var bx = 0; bx < 8; bx++) {
+      var p = giveMeAPieceAt(board, bx, by);
+      if (p != null) {
+        allPieces.push(p);
+      }
+    }
+  }
+  return allPieces;
 }

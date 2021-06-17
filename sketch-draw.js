@@ -10,12 +10,12 @@ function drawBoardRow(rowNumber) {
 
   for (; i < 8; i += 2) {
     fill(158, 157, 153);
-    square(i * BOX_SIZE, rowNumber * BOX_SIZE, BOX_SIZE);
+    square(i * global.BOX_SIZE, rowNumber * global.BOX_SIZE, global.BOX_SIZE);
   }
 }
 
 function drawPieces() {
-  for (var i = 0; i < chessPieces.length; i++) {
-    drawCharacter(chessPieces[i]);
+  for (var i = 0; i < global.chessPieces.length; i++) {
+    drawCharacter(global.chessPieces[i]);
   }
 }

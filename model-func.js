@@ -95,69 +95,19 @@ function findPieceIndex({ bx, by }) {
   return -1;
 }
 
-function stringToBoardNotation(positions) {
-  var array = [];
-  for (var i = 0; i < positions.length; i++) {
-    var row = positions[i];
-    var smallArray = [];
-    array[i] = smallArray;
-    for (var j = 0; j < row.length; j++) {
-      smallArray[j] = row.substr(j, 1);
-    }
-  }
-  return array;
-}
-
 function giveMeAPieceAt(board, bx, by) {
   var piece = board[by][bx];
-  var type = null;
-  var isWhite = true;
-  switch (piece) {
-    case "p":
-      type = "pawn";
-      isWhite = false;
-      break;
-    case "n":
-      type = "knight";
-      isWhite = false;
-      break;
-    case "b":
-      type = "bishop";
-      isWhite = false;
-      break;
-    case "r":
-      type = "rook";
-      isWhite = false;
-      break;
-    case "q":
-      type = "queen";
-      isWhite = false;
-      break;
-    case "k":
-      type = "king";
-      isWhite = false;
-      break;
-    case "P":
-      type = "pawn";
-      break;
-    case "N":
-      type = "knight";
-      break;
-    case "B":
-      type = "bishop";
-      break;
-    case "R":
-      type = "rook";
-      break;
-    case "Q":
-      type = "queen";
-      break;
-    case "K":
-      type = "king";
-      break;
-    default:
-      return null;
-  }
+  var nameMapping = {
+    p: "pawn",
+    n: "knight",
+    b: "bishop",
+    r: "rook",
+    q: "queen",
+    k: "king",
+  };
+  var type = nameMapping[piece.toLowerCase()];
+  var isWhite = piece === piece.toUpperCase();
+  if (type == null) return null;
   return createPiece(type, bx, by, isWhite);
 }
 

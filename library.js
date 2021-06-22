@@ -38,6 +38,16 @@ function drawShape(points) {
   }
 }
 
+function findSmaller(n1, n2) {
+  var smaller = n1 < n2 ? n1 : n2;
+  return smaller;
+}
+
+function findBigger(n1, n2) {
+  var bigger = n1 > n2 ? n1 : n2;
+  return bigger;
+}
+
 var _KEYS = {
   ESC: 27,
   ENTER: 13,

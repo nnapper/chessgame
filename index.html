@@ -37,8 +37,8 @@
     function resumeGame() {
       console.log("you just clicked the resume game button");
       if (localStorage.getItem("save") !== null) {
-        var myGameToday = localStorage.getItem("save").split(",");
-        global.chessPieces = createModelForChessPieces(myGameToday);
+        var mySavedGame = localStorage.getItem("save").split(",");
+        global.chessPieces = createModelForChessPieces(mySavedGame);
       }
     }
 

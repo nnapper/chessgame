@@ -60,40 +60,113 @@ function funcForValidMove(type) {
 }
 
 function funcForBlockedMove(type) {
+  const alwaysTrue = function () {
+    return true;
+  };
+
   if (type == "pawn") {
     return isPawnBlocked;
   } else if (type == "knight") {
-    return function () {
-      return false;
-    };
+    return alwaysTrue;
   } else if (type == "bishop") {
-    return true;
+    return isBishopBlocked;
   } else if (type == "rook") {
-    return true;
+    return isRookBlocked;
   } else if (type == "queen") {
-    return true;
+    return isQueenBlocked;
   } else if (type == "king") {
-    return true;
+    return alwaysTrue;
   }
 }
 
 function isPawnBlocked(bx, by, bx1, by1) {
+  var smaller = findSmaller(by, by1);
+  var bigger = findBigger(by, by1);
   var validMove = true;
-  var coords = {
-    bx: 1,
-    by: 1,
-  };
-  var p = findPiece(coords);
+  // var board = createBoardRepresentation(global.chessPieces);
+  // var isThereAPiece = null;
+  for (var i = smaller + 1; i < bigger; i++) {
+    var otherPiece = findPiece({ bx: bx, by: i });
+    if (otherPiece !== null) {
+      validMove = false;
+    }
 
-  if (pieceHeld.by === 2) {
-    pieceHeld.holding = false;
-    pieceHeld = null;
-    validMove = false;
+    /*
+    This is what I wrote, it works, 
+    but use the the one above, as it
+    would be used more often
+    
+    isThereAPiece = board[i][bx];
+    if (isThereAPiece !== "_") {
+      validMove = false;
+    }
+    */
   }
 
   return validMove;
 }
 
-function isBishopBlocked(newCoords, piece) {
+function isBishopBlocked(bx, by, bx1, by1) {
+  var lbx = bx;
+  var lby = by;
+  var rbx = bx1;
+  var rby = by1;
+  if (bx1 < bx) {
+    lbx = bx1;
+    lby = by1;
+    rbx = bx;
+    rby = by;
+  }
+
+  var y = lby;
+  for (var x = lbx + 1; x < rbx; x++) {
+    if (lby < rby) y++;
+    else y--;
+    var otherPiece = findPiece({ bx: x, by: y });
+    if (otherPiece !== null) {
+      return false;
+    }
+  }
   return true;
+}
+
+function isRookBlocked(bx, by, bx1, by1) {
+  var validMove = true;
+
+  if (by1 == by) {
+    var smaller = findSmaller(bx, bx1);
+    var bigger = findBigger(bx, bx1);
+
+    // check left to right
+    for (var i = smaller + 1; i < bigger; i++) {
+      var otherPiece = findPiece({ bx: i, by: by });
+      if (otherPiece !== null) {
+        validMove = false;
+      }
+    }
+  } else {
+    // check up and down
+    var smaller = findSmaller(by, by1);
+    var bigger = findBigger(by, by1);
+
+    for (var i = smaller + 1; i < bigger; i++) {
+      var otherPiece = findPiece({ bx: bx, by: i });
+      if (otherPiece !== null) {
+        validMove = false;
+      }
+    }
+  }
+
+  return validMove;
+}
+
+function isQueenBlocked(bx, by, bx1, by1) {
+  //  var funcToTest = bx != bx1 && by != by1 ? isBishopBlocked : isRookBlocked;
+  //  return funcToTest(bx, by, bx1, by1);
+  return (bx != bx1 && by != by1 ? isBishopBlocked : isRookBlocked)(
+    bx,
+    by,
+    bx1,
+    by1
+  );
 }

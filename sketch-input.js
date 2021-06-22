@@ -23,15 +23,34 @@ function mousePressed() {
   }
 }
 
+function checkDestBlockedByOwnPiece(coords, white) {
+  var p = findPiece(coords);
+  if (p == null) {
+    // nothing there
+    return false;
+  }
+
+  if (p.white === white) {
+    // pieceheld and dest p are the same color
+    return true; //blocking
+  }
+
+  return false; //capture
+}
+
 function mouseReleased() {
   if (pieceHeld == null) return;
 
   var coords = getMouseBoardCoords();
-
   if (coords == null) return;
+  var isBlockedByOwn = checkDestBlockedByOwnPiece(coords, pieceHeld.white);
+  var validMove1 = true;
+
+  if (isBlockedByOwn) validMove1 = false;
+  else validMove1 = true;
 
   var checkValidMoveFunction = funcForValidMove(pieceHeld.type);
-  var validMove = checkValidMoveFunction(
+  var validMove2 = checkValidMoveFunction(
     pieceHeld.bx,
     pieceHeld.by,
     coords.bx,
@@ -40,7 +59,7 @@ function mouseReleased() {
   );
 
   var checkNonBlockingFunction = funcForBlockedMove(pieceHeld.type);
-  var validMove = checkNonBlockingFunction(
+  var validMove3 = checkNonBlockingFunction(
     pieceHeld.bx,
     pieceHeld.by,
     coords.bx,
@@ -48,6 +67,7 @@ function mouseReleased() {
     pieceHeld.white
   );
 
+  var validMove = validMove1 && validMove2 && validMove3;
   console.log("valid move", validMove);
   if (!validMove) {
     pieceHeld.holding = false;
@@ -93,5 +113,5 @@ function mouseReleased() {
 
 function removePiece(piece) {
   var i = findPieceIndex(piece);
-  chessPieces.splice(i, 1);
+  global.chessPieces.splice(i, 1);
 }

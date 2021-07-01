@@ -1,17 +1,26 @@
-function isValidPawnMove(bx, by, bx1, by1, isWhite) {
-  if (bx1 !== bx) return false;
+function isValidPawnMove(bx, by, bx1, by1, isWhite, isCapturing) {
+  if (bx1 !== bx && !isCapturing) return false;
 
   if (isWhite && by1 >= by) return false;
   if (!isWhite && by1 <= by) return false;
 
-  var steps = Math.abs(by - by1);
-  if (steps > 2) return false;
+  var ySteps = Math.abs(by - by1);
+  var xSteps = Math.abs(by - by1);
+  if (ySteps > 2) return false;
+
+  if (
+    isCapturing &&
+    xSteps == 1 &&
+    ySteps == 1 &&
+    ((isWhite && by > by1) || (!isWhite && by1 > by))
+  )
+    return true;
 
   var startingOff = false;
   if (isWhite && by == 6) startingOff = true;
   if (!isWhite && by == 1) startingOff = true;
 
-  if (!startingOff && steps > 1) return false;
+  if (!startingOff && ySteps > 1) return false;
   return true;
 }
 
@@ -83,13 +92,25 @@ function isPawnBlocked(bx, by, bx1, by1) {
   var smaller = findSmaller(by, by1);
   var bigger = findBigger(by, by1);
   var validMove = true;
+
+  if (bx1 == bx) {
+    var pieceInFront = findPiece({ bx: bx, by: by1 });
+    if (pieceInFront != null) return false;
+  }
+
   // var board = createBoardRepresentation(global.chessPieces);
   // var isThereAPiece = null;
+
   for (var i = smaller + 1; i < bigger; i++) {
     var otherPiece = findPiece({ bx: bx, by: i });
     if (otherPiece !== null) {
       validMove = false;
     }
+
+    // var isThereAPiece = board[i][bx];
+    // if (isThereAPiece !== "_") {
+    //   validMove = false;
+    // }
 
     /*
     This is what I wrote, it works, 

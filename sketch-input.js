@@ -8,17 +8,17 @@ function keyPressed() {
   }
 }
 
-var pieceHeld = null;
+global.pieceHeld = null;
 
 function mousePressed() {
-  if (pieceHeld != null) return;
+  if (global.pieceHeld != null) return;
 
   var coords = getMouseBoardCoords();
   if (coords == null) return;
 
   var piece = findPiece(coords);
   if (piece != null) {
-    pieceHeld = piece;
+    global.pieceHeld = piece;
     piece.holding = true;
   }
 }
@@ -31,7 +31,7 @@ function checkDestBlockedByOwnPiece(coords, white) {
   }
 
   if (p.white === white) {
-    // pieceheld and dest p are the same color
+    // global.pieceHeld and dest p are the same color
     return true; //blocking
   }
 
@@ -39,39 +39,45 @@ function checkDestBlockedByOwnPiece(coords, white) {
 }
 
 function mouseReleased() {
-  if (pieceHeld == null) return;
+  if (global.pieceHeld == null) return;
 
   var coords = getMouseBoardCoords();
   if (coords == null) return;
-  var isBlockedByOwn = checkDestBlockedByOwnPiece(coords, pieceHeld.white);
+  var isBlockedByOwn = checkDestBlockedByOwnPiece(
+    coords,
+    global.pieceHeld.white
+  );
   var validMove1 = true;
 
   if (isBlockedByOwn) validMove1 = false;
   else validMove1 = true;
 
-  var checkValidMoveFunction = funcForValidMove(pieceHeld.type);
+  var isThereAPiece = findPiece(coords) != null;
+
+  var checkValidMoveFunction = funcForValidMove(global.pieceHeld.type);
   var validMove2 = checkValidMoveFunction(
-    pieceHeld.bx,
-    pieceHeld.by,
+    global.pieceHeld.bx,
+    global.pieceHeld.by,
     coords.bx,
     coords.by,
-    pieceHeld.white
+    global.pieceHeld.white,
+    isThereAPiece
   );
 
-  var checkNonBlockingFunction = funcForBlockedMove(pieceHeld.type);
+  var checkNonBlockingFunction = funcForBlockedMove(global.pieceHeld.type);
   var validMove3 = checkNonBlockingFunction(
-    pieceHeld.bx,
-    pieceHeld.by,
+    global.pieceHeld.bx,
+    global.pieceHeld.by,
     coords.bx,
     coords.by,
-    pieceHeld.white
+    global.pieceHeld.white
   );
 
   var validMove = validMove1 && validMove2 && validMove3;
   console.log("valid move", validMove);
   if (!validMove) {
-    pieceHeld.holding = false;
-    pieceHeld = null;
+    global.pieceHeld.holding = false;
+    global.pieceHeld = null;
     return;
   }
 
@@ -79,36 +85,52 @@ function mouseReleased() {
 
   // empty box
   if (p == null) {
-    if (pieceHeld.type == "pawn" && pieceHeld.white && coords.by == 0)
-      pieceHeld.type = "queen";
-    if (pieceHeld.type == "pawn" && !pieceHeld.white && coords.by == 7)
-      pieceHeld.type = "queen";
+    if (
+      global.pieceHeld.type == "pawn" &&
+      global.pieceHeld.white &&
+      coords.by == 0
+    )
+      global.pieceHeld.type = "queen";
+    if (
+      global.pieceHeld.type == "pawn" &&
+      !global.pieceHeld.white &&
+      coords.by == 7
+    )
+      global.pieceHeld.type = "queen";
 
-    pieceHeld.bx = coords.bx;
-    pieceHeld.by = coords.by;
-    pieceHeld.holding = false;
-    pieceHeld = null;
+    global.pieceHeld.bx = coords.bx;
+    global.pieceHeld.by = coords.by;
+    global.pieceHeld.holding = false;
+    global.pieceHeld = null;
     return;
   }
 
   // it could be itself
   // is not itself
-  if (pieceHeld === p || p.white == pieceHeld.white) {
-    pieceHeld.holding = false;
-    pieceHeld = null;
+  if (global.pieceHeld === p || p.white == global.pieceHeld.white) {
+    global.pieceHeld.holding = false;
+    global.pieceHeld = null;
     return;
   }
 
-  if (pieceHeld.type == "pawn" && pieceHeld.white && coords.by == 0)
-    pieceHeld.type = "queen";
-  if (pieceHeld.type == "pawn" && !pieceHeld.white && coords.by == 7)
-    pieceHeld.type = "queen";
+  if (
+    global.pieceHeld.type == "pawn" &&
+    global.pieceHeld.white &&
+    coords.by == 0
+  )
+    global.pieceHeld.type = "queen";
+  if (
+    global.pieceHeld.type == "pawn" &&
+    !global.pieceHeld.white &&
+    coords.by == 7
+  )
+    global.pieceHeld.type = "queen";
 
   removePiece(p);
-  pieceHeld.bx = coords.bx;
-  pieceHeld.by = coords.by;
-  pieceHeld.holding = false;
-  pieceHeld = null;
+  global.pieceHeld.bx = coords.bx;
+  global.pieceHeld.by = coords.by;
+  global.pieceHeld.holding = false;
+  global.pieceHeld = null;
 }
 
 function removePiece(piece) {

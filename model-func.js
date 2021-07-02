@@ -25,6 +25,7 @@ function createPiece(type, bx, by, isWhite) {
     s: global.PIECE_SIZE,
     type,
     holding: false,
+    movedYet: false,
     xfn: function () {
       return convertBoard2Xy(this.bx);
     },
@@ -34,50 +35,21 @@ function createPiece(type, bx, by, isWhite) {
     createPoints: function () {
       return Shape.createPiece(this);
     },
+    createPointsArr: function () {
+      var shapes = [Shape.createPiece(this)];
+
+      for (var i = this.s; i > 0; i -= 10) {
+        var tri = Shape.createTriangle({ s: i });
+        shapes.push(tri);
+      }
+      return shapes;
+    },
     color,
   };
 }
 
-function createAllPieces() {
-  var pieces = [];
-  var types = ["pawn", "knight", "bishop", "rook", "queen", "king"];
-
-  for (var i = 0; i < types.length; i++) {
-    var t = types[i];
-
-    if (t == "pawn") {
-      var by = 1;
-      for (var j = 0; j < 8; j++) pieces.push(createPiece(t, j, by, false));
-      by = 6;
-      for (var j = 0; j < 8; j++) pieces.push(createPiece(t, j, by, true));
-    } else if (t == "knight") {
-      pieces.push(createPiece(t, 1, 0, false));
-      pieces.push(createPiece(t, 6, 0, false));
-
-      pieces.push(createPiece(t, 1, 7, true));
-      pieces.push(createPiece(t, 6, 7, true));
-    } else if (t == "bishop") {
-      pieces.push(createPiece(t, 2, 0, false));
-      pieces.push(createPiece(t, 5, 0, false));
-
-      pieces.push(createPiece(t, 2, 7, true));
-      pieces.push(createPiece(t, 5, 7, true));
-    } else if (t == "rook") {
-      pieces.push(createPiece(t, 0, 0, false));
-      pieces.push(createPiece(t, 7, 0, false));
-
-      pieces.push(createPiece(t, 0, 7, true));
-      pieces.push(createPiece(t, 7, 7, true));
-    } else if (t == "queen") {
-      pieces.push(createPiece(t, 3, 0, false));
-      pieces.push(createPiece(t, 3, 7, true));
-    } else if (t == "king") {
-      pieces.push(createPiece(t, 4, 0, false));
-      pieces.push(createPiece(t, 4, 7, true));
-    }
-  }
-
-  return pieces;
+function findPieceByBxBy(bx, by) {
+  return findPiece({ bx: bx, by: by });
 }
 
 function findPiece(coord) {

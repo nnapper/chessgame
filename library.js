@@ -1,15 +1,19 @@
 function drawCharacter(object) {
-  // var points = []
-  // if (object.type === "player") points = Shape.createPlayer(object)
-  // else if (object.type === "bullet") points = Shape.createBullet(object)
-
   var points = object.createPoints();
   var movedPoints = movePoints(points, object);
-  push();
   stroke(color(object.color));
   strokeWeight(global.boxSize / 2);
   drawShape(movedPoints);
-  pop();
+}
+
+function drawMultiLineCharacter(object) {
+  var pointsArr = object.createPointsArr();
+  pointsArr.forEach((points) => {
+    var movedPoints = movePoints(points, object);
+    stroke(color(object.color));
+    strokeWeight(global.boxSize / 2);
+    drawShape(movedPoints);
+  });
 }
 
 // move; {x: 123, y: 2313}

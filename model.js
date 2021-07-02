@@ -27,6 +27,7 @@ const global = (function () {
     BOARD_SIZE: boardSize,
     BOX_SIZE: boxSize,
     PIECE_SIZE: pieceSize,
+    pieceHeld: null,
 
     chessPieces: [], //createModelForChessPieces(DEFAULT_POSITIONS),
     removedPieces: [],

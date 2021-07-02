@@ -49,6 +49,7 @@ function isValidQueenMove(bx, by, bx1, by1) {
 function isValidKingMove(bx, by, bx1, by1) {
   var xSteps = Math.abs(bx - bx1);
   var ySteps = Math.abs(by - by1);
+
   return xSteps < 2 && ySteps < 2;
 }
 

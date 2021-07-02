@@ -16,6 +16,6 @@ function drawBoardRow(rowNumber) {
 
 function drawPieces() {
   for (var i = 0; i < global.chessPieces.length; i++) {
-    drawCharacter(global.chessPieces[i]);
+    drawMultiLineCharacter(global.chessPieces[i]);
   }
 }

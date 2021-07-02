@@ -18,19 +18,29 @@ const Shape = {
     return funcMap[piece.type](piece);
   },
 
+  createTriangle: function ({ s }) {
+    var a = s / 8;
+    return [
+      // top
+      { x: 0, y: -a },
+      { x: a, y: a },
+      { x: -a, y: a },
+    ];
+  },
+
   createPawn: function ({ s }) {
     var a = s / 2;
     return [
       // top
-      { x: 0, y: -a },
-      { x: a / 2, y: -a / 2 },
+      { x: 0, y: -a * 0.6 },
+      { x: a / 2, y: (-a / 2) * 0.6 },
 
       // bottom
       { x: a / 4, y: a / 8 }, // point 3
       { x: a, y: a },
       { x: -a, y: a },
       { x: -a / 4, y: a / 8 },
-      { x: -a / 2, y: -a / 2 },
+      { x: -a / 2, y: (-a / 2) * 0.6 },
     ];
   },
 

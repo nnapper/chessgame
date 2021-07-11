@@ -53,6 +53,8 @@ function checkForCastling(coords) {
   var king = global.pieceHeld;
   var kingSide = true;
   if (king.type != "king" || king.movedYet) return false;
+  if (coords.bx != 6 || coords.bx != 3 || coords.by != 0 || coords.y != 7)
+    return false;
   if (king.bx > coords.bx) kingSide = false;
   var r = findPieceByBxBy(kingSide ? 7 : 0, king.by);
   if (r == null || r.movedYet || r.type != "rook") return false;
@@ -130,6 +132,11 @@ function mouseReleased() {
     king.by = coords.by;
     king.holding = false;
     global.pieceHeld = null;
+    if (global.isWhiteTurn) {
+      global.isWhiteTurn = false;
+    } else {
+      global.isWhiteTurn = true;
+    }
     return;
   }
 
@@ -140,6 +147,11 @@ function mouseReleased() {
     pawn.by = coords.by;
     pawn.holding = false;
     global.pieceHeld = null;
+    if (global.isWhiteTurn) {
+      global.isWhiteTurn = false;
+    } else {
+      global.isWhiteTurn = true;
+    }
     return;
   }
 

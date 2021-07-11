@@ -43,10 +43,10 @@
 
     function resumeGame() {
       console.log("you just clicked the resume game button");
-      if (localStorage.getItem("save") !== null) {
+      if (localStorage.getItem("save") != null) {
         var mySavedGame = localStorage.getItem("save").split(",");
         global.chessPieces = createModelForChessPieces(mySavedGame);
-        if (localStorage.getItem("save turn").split(",") !== null) {
+        if (localStorage.getItem("save turn").split(",") != null) {
           var mySavedTurn = localStorage.getItem("save turn").split(",");
           global.isWhiteTurn = mySavedTurn;
         }

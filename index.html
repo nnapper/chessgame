@@ -18,6 +18,9 @@
       <button onclick="newGame()">New Game</button>
       <button onclick="saveGame()">Save Game</button>
       <button onclick="resumeGame()">Resume Game</button>
+      <button onclick="smallBoard()">Small Board</button>
+      <button onclick="mediumBoard()">Medium Board</button>
+      <button onclick="largeBoard()">Large Board</button>
     </div>
   </body>
   <script>
@@ -32,6 +35,10 @@
         "save",
         createBoardRepresentation(global.chessPieces)
       );
+      localStorage.setItem(
+        "save turn",
+        (global.savedTurn = global.isWhiteTurn)
+      );
     }
 
     function resumeGame() {
@@ -39,6 +46,10 @@
       if (localStorage.getItem("save") !== null) {
         var mySavedGame = localStorage.getItem("save").split(",");
         global.chessPieces = createModelForChessPieces(mySavedGame);
+        if (localStorage.getItem("save turn").split(",") !== null) {
+          var mySavedTurn = localStorage.getItem("save turn").split(",");
+          global.isWhiteTurn = mySavedTurn;
+        }
       }
     }
 
@@ -91,6 +102,33 @@
         t = t.toUpperCase();
       }
       return t;
+    }
+
+    function smallBoard() {
+      resize(400);
+    }
+
+    function mediumBoard() {
+      resize(600);
+    }
+
+    function largeBoard() {
+      resize(800);
+    }
+
+    function resize(size) {
+      const boxSize = size / 8;
+      const pieceSize = boxSize * 0.6;
+      const weight = boxSize / 30;
+
+      global.BOARD_SIZE = size;
+      global.BOX_SIZE = boxSize;
+      global.PIECE_SIZE = pieceSize;
+      global.STROKE_WEIGHT = weight;
+      var b = createBoardRepresentation(global.chessPieces);
+      global.chessPieces = createModelForChessPieces(b);
+
+      resizeCanvas(global.BOARD_SIZE, global.BOARD_SIZE);
     }
   </script>
 </html>

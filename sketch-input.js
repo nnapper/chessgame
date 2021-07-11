@@ -9,6 +9,7 @@ function keyPressed() {
 }
 
 function mousePressed() {
+  if (global.GAME_OVER) return;
   if (global.pieceHeld != null) return;
 
   // not holding piece
@@ -17,6 +18,11 @@ function mousePressed() {
 
   var piece = findPiece(coords);
   if (piece != null) {
+    if (global.isWhiteTurn) {
+      if (!piece.white) return;
+      else global.isWhiteTurn = false;
+    }
+
     if (
       global.previousPlace != null &&
       piece.white == global.previousPlace.white
@@ -211,6 +217,16 @@ function mouseReleased() {
       (!global.pieceHeld.white && coords.by == 7))
   ) {
     global.pieceHeld.type = "queen";
+  }
+
+  if (p.type == "king" && p.white != global.pieceHeld.white) {
+    if (global.pieceHeld.white) {
+      global.WHITE_WINS++;
+      global.GAME_OVER = true;
+    } else {
+      global.BLACK_WINS++;
+      global.GAME_OVER = true;
+    }
   }
 
   global.previousPlace = {

@@ -37,10 +37,11 @@ function createPiece(type, bx, by, isWhite) {
     },
     createPointsArr: function () {
       var shapes = [Shape.createPiece(this)];
-
-      for (var i = this.s; i > 0; i -= 10) {
-        var tri = Shape.createTriangle({ s: i });
-        shapes.push(tri);
+      if (this.type == "pawn") {
+        for (var i = this.s; i > 0; i -= 50) {
+          var pawn = Shape.createPawn({ s: i });
+          shapes.push(pawn);
+        }
       }
       return shapes;
     },

@@ -22,14 +22,18 @@ const global = (function () {
   const boardSize = 800;
   const boxSize = boardSize / 8;
   const pieceSize = boxSize * 0.6;
+  const weight = boxSize / 30;
 
   return {
     BOARD_SIZE: boardSize,
     BOX_SIZE: boxSize,
     PIECE_SIZE: pieceSize,
-    pieceHeld: null,
+    STROKE_WEIGHT: weight,
 
+    pieceHeld: null,
     chessPieces: [], //createModelForChessPieces(DEFAULT_POSITIONS),
     removedPieces: [],
+    lastPieceMoved: null,
+    previousPlace: null,
   };
 })();

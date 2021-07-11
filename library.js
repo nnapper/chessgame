@@ -2,7 +2,7 @@ function drawCharacter(object) {
   var points = object.createPoints();
   var movedPoints = movePoints(points, object);
   stroke(color(object.color));
-  strokeWeight(global.boxSize / 2);
+  strokeWeight(global.STROKE_WEIGHT);
   drawShape(movedPoints);
 }
 
@@ -11,7 +11,7 @@ function drawMultiLineCharacter(object) {
   pointsArr.forEach((points) => {
     var movedPoints = movePoints(points, object);
     stroke(color(object.color));
-    strokeWeight(global.boxSize / 2);
+    strokeWeight(global.STROKE_WEIGHT);
     drawShape(movedPoints);
   });
 }

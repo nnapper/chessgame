@@ -8,6 +8,7 @@ function drawBoard() {
 function drawBoardRow(rowNumber) {
   var i = rowNumber % 2 == 0 ? 0 : 1;
 
+  strokeWeight(0);
   for (; i < 8; i += 2) {
     fill(158, 157, 153);
     square(i * global.BOX_SIZE, rowNumber * global.BOX_SIZE, global.BOX_SIZE);

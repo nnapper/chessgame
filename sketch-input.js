@@ -11,11 +11,18 @@ function keyPressed() {
 function mousePressed() {
   if (global.pieceHeld != null) return;
 
+  // not holding piece
   var coords = getMouseBoardCoords();
   if (coords == null) return;
 
   var piece = findPiece(coords);
   if (piece != null) {
+    if (
+      global.previousPlace != null &&
+      piece.white == global.previousPlace.white
+    )
+      return;
+
     global.pieceHeld = piece;
     piece.holding = true;
   }
@@ -62,6 +69,31 @@ function checkForCastling(coords) {
   return true;
 }
 
+function checkForEnPassent(coords) {
+  var pawn1 = global.lastPieceMoved;
+  var pawn1b = global.previousPlace;
+  var pawn2 = global.pieceHeld;
+  if (pawn1 == null) return false;
+  if (pawn1.white) {
+    if (pawn1.by != 4) return false;
+  } else {
+    if (pawn1.by != 3) return false;
+  }
+  if (pawn1.type != "pawn" && pawn2.type != "pawn") return false;
+  if (Math.abs(pawn1.by - pawn1b.by) != 2) return false;
+  if (pawn2.by != pawn1.by) return false;
+  if (Math.abs(pawn2.bx - pawn1.bx) != 1) return false;
+  if (coords.bx != pawn1.bx) return false;
+  if (pawn1.white) {
+    if (coords.by != pawn1.by + 1) return false;
+  } else {
+    if (coords.by != pawn1.by - 1) return false;
+  }
+
+  removePiece(pawn1);
+  return true;
+}
+
 function mouseReleased() {
   // not holding piece; do nothing
   if (global.pieceHeld == null) return;
@@ -91,6 +123,16 @@ function mouseReleased() {
     king.bx = coords.bx;
     king.by = coords.by;
     king.holding = false;
+    global.pieceHeld = null;
+    return;
+  }
+
+  var enPassant = checkForEnPassent(coords);
+  if (enPassant) {
+    var pawn = global.pieceHeld;
+    pawn.bx = coords.bx;
+    pawn.by = coords.by;
+    pawn.holding = false;
     global.pieceHeld = null;
     return;
   }
@@ -129,6 +171,7 @@ function mouseReleased() {
 
   // valid action
   global.pieceHeld.movedYet = true;
+  global.lastPieceMoved = global.pieceHeld;
   var p = findPiece(coords);
   if (p == null) {
     // making a queen
@@ -140,6 +183,12 @@ function mouseReleased() {
       global.pieceHeld.type = "queen";
     }
 
+    global.previousPlace = {
+      bx: global.pieceHeld.bx,
+      by: global.pieceHeld.by,
+      white: global.pieceHeld.white,
+      type: global.pieceHeld.type,
+    };
     global.pieceHeld.bx = coords.bx;
     global.pieceHeld.by = coords.by;
     global.pieceHeld.holding = false;
@@ -164,6 +213,12 @@ function mouseReleased() {
     global.pieceHeld.type = "queen";
   }
 
+  global.previousPlace = {
+    bx: global.pieceHeld.bx,
+    by: global.pieceHeld.by,
+    white: global.pieceHeld.white,
+    type: global.pieceHeld.type,
+  };
   removePiece(p);
   global.pieceHeld.bx = coords.bx;
   global.pieceHeld.by = coords.by;
